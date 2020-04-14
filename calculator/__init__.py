@@ -1,2 +1,5 @@
+from .parse import parse
+
+
 def evaluate(string):
-    return int(string)
+    return parse(string).evaluate()
