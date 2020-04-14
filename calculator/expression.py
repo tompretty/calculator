@@ -1,5 +1,4 @@
-
-class ConstExpr():
+class ConstExpr:
     def __init__(self, value):
         self.value = value
 
@@ -7,7 +6,7 @@ class ConstExpr():
         return self.value
 
 
-class PlusExpr():
+class PlusExpr:
     def __init__(self, left, right):
         self.left = left
         self.right = right
@@ -16,7 +15,7 @@ class PlusExpr():
         return self.left.evaluate() + self.right.evaluate()
 
 
-class TimesExpr():
+class TimesExpr:
     def __init__(self, left, right):
         self.left = left
         self.right = right
@@ -25,7 +24,7 @@ class TimesExpr():
         return self.left.evaluate() * self.right.evaluate()
 
 
-class DivExpr():
+class DivExpr:
     def __init__(self, left, right):
         self.left = left
         self.right = right
@@ -34,7 +33,7 @@ class DivExpr():
         return self.left.evaluate() / self.right.evaluate()
 
 
-class ExpExpr():
+class ExpExpr:
     def __init__(self, left, right):
         self.left = left
         self.right = right
