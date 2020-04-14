@@ -1,4 +1,9 @@
-class ConstExpr:
+class Expr:
+    def evaluate(self):
+        raise NotImplementedError()
+
+
+class ConstExpr(Expr):
     def __init__(self, value):
         self.value = value
 
@@ -6,46 +11,32 @@ class ConstExpr:
         return self.value
 
 
-class PlusExpr:
+class BinaryExpr(Expr):
     def __init__(self, left, right):
         self.left = left
         self.right = right
 
+
+class PlusExpr(BinaryExpr):
     def evaluate(self):
         return self.left.evaluate() + self.right.evaluate()
 
 
-class SubExpr:
-    def __init__(self, left, right):
-        self.left = left
-        self.right = right
-
+class SubExpr(BinaryExpr):
     def evaluate(self):
         return self.left.evaluate() - self.right.evaluate()
 
 
-class TimesExpr:
-    def __init__(self, left, right):
-        self.left = left
-        self.right = right
-
+class TimesExpr(BinaryExpr):
     def evaluate(self):
         return self.left.evaluate() * self.right.evaluate()
 
 
-class DivExpr:
-    def __init__(self, left, right):
-        self.left = left
-        self.right = right
-
+class DivExpr(BinaryExpr):
     def evaluate(self):
         return self.left.evaluate() / self.right.evaluate()
 
 
-class ExpExpr:
-    def __init__(self, left, right):
-        self.left = left
-        self.right = right
-
+class ExpExpr(BinaryExpr):
     def evaluate(self):
         return self.left.evaluate() ** self.right.evaluate()
