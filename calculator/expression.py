@@ -32,3 +32,12 @@ class DivExpr():
 
     def evaluate(self):
         return self.left.evaluate() / self.right.evaluate()
+
+
+class ExpExpr():
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+    def evaluate(self):
+        return self.left.evaluate() ** self.right.evaluate()

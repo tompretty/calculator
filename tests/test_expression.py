@@ -1,4 +1,4 @@
-from calculator.expression import ConstExpr, PlusExpr, TimesExpr, DivExpr
+from calculator.expression import ConstExpr, PlusExpr, TimesExpr, DivExpr, ExpExpr
 
 
 def test_constant_expression_evaluates_to_itself():
@@ -23,3 +23,9 @@ def test_divide_expression_evaluates_to_the_left_divided_by_the_right_operand():
     expr = DivExpr(left=ConstExpr(value=3), right=ConstExpr(value=4))
 
     assert expr.evaluate() == 0.75
+
+
+def test_exponentiation_expression_evaluates_to_the_left_raised_to_the_right_operand():
+    expr = ExpExpr(left=ConstExpr(value=3), right=ConstExpr(value=4))
+
+    assert expr.evaluate() == 81
