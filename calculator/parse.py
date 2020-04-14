@@ -97,57 +97,40 @@ class Op:
     precedence = 0
 
     def push_to_stack(self, stack):
-        pass
+        raise NotImplementedError()
 
 
-class PlusOp(Op):
+class BinaryOp(Op):
+    def push_to_stack(self, stack):
+        right = stack.pop()
+        left = stack.pop()
+
+        stack.push(self.expr_cls(left, right))
+
+
+class PlusOp(BinaryOp):
     precedence = 1
-
-    def push_to_stack(self, stack):
-        right = stack.pop()
-        left = stack.pop()
-
-        stack.push(PlusExpr(left, right))
+    expr_cls = PlusExpr
 
 
-class SubOp(Op):
+class SubOp(BinaryOp):
     precedence = 1
-
-    def push_to_stack(self, stack):
-        right = stack.pop()
-        left = stack.pop()
-
-        stack.push(SubExpr(left, right))
+    expr_cls = SubExpr
 
 
-class TimesOp(Op):
+class TimesOp(BinaryOp):
     precedence = 2
-
-    def push_to_stack(self, stack):
-        right = stack.pop()
-        left = stack.pop()
-
-        stack.push(TimesExpr(left, right))
+    expr_cls = TimesExpr
 
 
-class DivOp(Op):
+class DivOp(BinaryOp):
     precedence = 2
-
-    def push_to_stack(self, stack):
-        right = stack.pop()
-        left = stack.pop()
-
-        stack.push(DivExpr(left, right))
+    expr_cls = DivExpr
 
 
-class ExpOp(Op):
+class ExpOp(BinaryOp):
     precedence = 3
-
-    def push_to_stack(self, stack):
-        right = stack.pop()
-        left = stack.pop()
-
-        stack.push(ExpExpr(left, right))
+    expr_cls = ExpExpr
 
 
 class LeftParenOp(Op):
