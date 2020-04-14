@@ -105,6 +105,8 @@ class DivOp:
 
 
 class ExpOp:
+    presedence = 3
+
     def push_to_stack(self, stack):
         right = stack.pop()
         left = stack.pop()
