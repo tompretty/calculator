@@ -1,4 +1,4 @@
-from .expression import ConstExpr, PlusExpr, TimesExpr
+from .expression import ConstExpr, PlusExpr, TimesExpr, DivExpr
 from .utils import Stack
 
 
@@ -20,6 +20,8 @@ class Parser:
                 self._push_to_operator_stack(PlusOp())
             elif self._is_times(c):
                 self._push_to_operator_stack(TimesOp())
+            elif self._is_divide(c):
+                self._push_to_operator_stack(DivOp())
             else:
                 pass
 
@@ -56,6 +58,9 @@ class Parser:
     def _is_times(self, c):
         return c == "*"
 
+    def _is_divide(self, c):
+        return c == "/"
+
 
 class Op:
     presedence = 0
@@ -68,8 +73,8 @@ class PlusOp:
     presedence = 1
 
     def push_to_stack(self, stack):
-        left = stack.pop()
         right = stack.pop()
+        left = stack.pop()
 
         stack.push(PlusExpr(left, right))
 
@@ -78,7 +83,15 @@ class TimesOp:
     presedence = 2
 
     def push_to_stack(self, stack):
-        left = stack.pop()
         right = stack.pop()
+        left = stack.pop()
 
         stack.push(TimesExpr(left, right))
+
+
+class DivOp:
+    def push_to_stack(self, stack):
+        right = stack.pop()
+        left = stack.pop()
+
+        stack.push(DivExpr(left, right))
