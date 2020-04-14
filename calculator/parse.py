@@ -90,6 +90,8 @@ class TimesOp:
 
 
 class DivOp:
+    presedence = 2
+
     def push_to_stack(self, stack):
         right = stack.pop()
         left = stack.pop()
