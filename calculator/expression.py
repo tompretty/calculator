@@ -14,3 +14,12 @@ class PlusExpr():
 
     def evaluate(self):
         return self.left.evaluate() + self.right.evaluate()
+
+
+class TimesExpr():
+    def __init__(self, left, right):
+        self.left = left
+        self.right = right
+
+    def evaluate(self):
+        return self.left.evaluate() * self.right.evaluate()

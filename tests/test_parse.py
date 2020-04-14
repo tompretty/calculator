@@ -1,5 +1,5 @@
 from calculator.parse import parse
-from calculator.expression import ConstExpr, PlusExpr
+from calculator.expression import ConstExpr, PlusExpr, TimesExpr
 
 
 def test_parsing_a_constant_returns_a_constant_expression():
@@ -16,3 +16,11 @@ def test_parsing_a_plus_returns_a_plus_expression():
     expression = parse(string)
 
     assert type(expression) == PlusExpr
+
+
+def test_parsing_a_times_returns_a_times_expression():
+    string = "3*4"
+
+    expression = parse(string)
+
+    assert type(expression) == TimesExpr
