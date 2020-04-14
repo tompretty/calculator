@@ -1,4 +1,5 @@
 from .expression import ConstExpr, PlusExpr
+from .utils import Stack
 
 
 def parse(string):
@@ -8,8 +9,8 @@ def parse(string):
 class Parser:
     def __init__(self, string):
         self.string = string
-        self.output_stack = []
-        self.operator_stack = []
+        self.output_stack = Stack()
+        self.operator_stack = Stack()
 
     def parse(self):
         for c in self.string:
@@ -28,16 +29,16 @@ class Parser:
         return self.output_stack.pop()
 
     def _push_constant_to_output_stack(self, c):
-        self.output_stack.append(ConstExpr(value=int(c)))
+        self.output_stack.push(ConstExpr(value=int(c)))
 
     def _push_plus_to_operator_stack(self):
-        self.operator_stack.append("+")
+        self.operator_stack.push("+")
 
     def _push_plus_to_output_stack(self):
         right = self.output_stack.pop()
         left = self.output_stack.pop()
 
-        self.output_stack.append(PlusExpr(left=left, right=right))
+        self.output_stack.push(PlusExpr(left=left, right=right))
 
     def _is_digit(self, c):
         return c.isdigit()
