@@ -40,3 +40,11 @@ def test_parsing_an_exponentiation_return_an_exponentiation_expression():
     expression = parse(string)
 
     assert type(expression) == ExpExpr
+
+
+def test_parsing_parenthesis_changes_the_precedence():
+    string = "(3+4)*5"
+
+    expression = parse(string)
+
+    assert type(expression) == TimesExpr

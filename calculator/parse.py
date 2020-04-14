@@ -1,4 +1,4 @@
-from .expression import ConstExpr, PlusExpr, TimesExpr, DivExpr, ExpExpr
+from .expression import ConstExpr, DivExpr, ExpExpr, PlusExpr, TimesExpr
 from .utils import Stack
 
 
@@ -24,6 +24,10 @@ class Parser:
                 self._push_to_operator_stack(DivOp())
             elif self._is_exponentiation(c):
                 self._push_to_operator_stack(ExpOp())
+            elif self._is_left_paren(c):
+                self._push_left_paren_to_operator_stack()
+            elif self._is_right_paren(c):
+                self._push_right_paren_to_operator_stack()
             else:
                 pass
 
@@ -37,11 +41,22 @@ class Parser:
     def _push_to_operator_stack(self, op):
         while self.operator_stack:
             top = self.operator_stack.peak()
-            if op.presedence >= top.presedence:
+            if op.precedence >= top.precedence:
                 break
             self._push_top_operator_to_output_stack()
 
         self.operator_stack.push(op)
+
+    def _push_left_paren_to_operator_stack(self):
+        self.operator_stack.push(LeftParenOp())
+
+    def _push_right_paren_to_operator_stack(self):
+        while self.operator_stack:
+            top = self.operator_stack.peak()
+            if type(top) == LeftParenOp:
+                self.operator_stack.pop()
+                break
+            self._push_top_operator_to_output_stack()
 
     def _push_top_operator_to_output_stack(self):
         top = self.operator_stack.pop()
@@ -66,16 +81,22 @@ class Parser:
     def _is_exponentiation(self, c):
         return c == "^"
 
+    def _is_left_paren(self, c):
+        return c == "("
+
+    def _is_right_paren(self, c):
+        return c == ")"
+
 
 class Op:
-    presedence = 0
+    precedence = 0
 
     def push_to_stack(self, stack):
         pass
 
 
-class PlusOp:
-    presedence = 1
+class PlusOp(Op):
+    precedence = 1
 
     def push_to_stack(self, stack):
         right = stack.pop()
@@ -84,8 +105,8 @@ class PlusOp:
         stack.push(PlusExpr(left, right))
 
 
-class TimesOp:
-    presedence = 2
+class TimesOp(Op):
+    precedence = 2
 
     def push_to_stack(self, stack):
         right = stack.pop()
@@ -94,8 +115,8 @@ class TimesOp:
         stack.push(TimesExpr(left, right))
 
 
-class DivOp:
-    presedence = 2
+class DivOp(Op):
+    precedence = 2
 
     def push_to_stack(self, stack):
         right = stack.pop()
@@ -104,11 +125,15 @@ class DivOp:
         stack.push(DivExpr(left, right))
 
 
-class ExpOp:
-    presedence = 3
+class ExpOp(Op):
+    precedence = 3
 
     def push_to_stack(self, stack):
         right = stack.pop()
         left = stack.pop()
 
         stack.push(ExpExpr(left, right))
+
+
+class LeftParenOp(Op):
+    pass
