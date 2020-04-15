@@ -8,125 +8,81 @@ class Parser:
         self.tokens = tokens
         self.output_stack = Stack()
         self.operator_stack = Stack()
+        self.current = 0
 
     def parse(self):
-        for t in self.tokens:
-            if t.type == TokenType.NUMBER:
-                self._push_constant_to_output_stack(t)
-            elif t.type == TokenType.PLUS:
-                self._push_to_operator_stack(PlusOp())
-            elif t.type == TokenType.MINUS:
-                self._push_to_operator_stack(MinusOp())
-            elif t.type == TokenType.TIMES:
-                self._push_to_operator_stack(TimesOp())
-            elif t.type == TokenType.DIVIDE:
-                self._push_to_operator_stack(DivOp())
-            elif t.type == TokenType.EXP:
-                self._push_to_operator_stack(ExpOp())
-            elif t.type == TokenType.LEFT_PAREN:
-                self._push_left_paren_to_operator_stack()
-            elif t.type == TokenType.RIGHT_PAREN:
-                self._push_right_paren_to_operator_stack()
+        return self._expression()
 
-        self._push_all_operators_to_output_stack()
+    def _expression(self):
+        return self._addition()
 
-        return self.output_stack.pop()
+    def _addition(self):
+        expr = self._multiplication()
 
-    def _push_constant_to_output_stack(self, t):
-        self.output_stack.push(ConstExpr(value=t.value))
+        while self._match(TokenType.PLUS, TokenType.MINUS):
+            op = self._previous()
+            if op.type == TokenType.PLUS:
+                expr = PlusExpr(expr, self._multiplication())
+            else:
+                expr = MinusExpr(expr, self._multiplication())
 
-    def _push_to_operator_stack(self, op):
-        while self.operator_stack:
-            top = self.operator_stack.peak()
-            if op.precedence >= top.precedence:
-                break
-            self._push_top_operator_to_output_stack()
+        return expr
 
-        self.operator_stack.push(op)
+    def _multiplication(self):
+        expr = self._exponentiation()
 
-    def _push_left_paren_to_operator_stack(self):
-        self.operator_stack.push(LeftParenOp())
+        while self._match(TokenType.TIMES, TokenType.DIVIDE):
+            op = self._previous()
+            if op.type == TokenType.TIMES:
+                expr = TimesExpr(expr, self._exponentiation())
+            else:
+                expr = DivExpr(expr, self._exponentiation())
 
-    def _push_right_paren_to_operator_stack(self):
-        while self.operator_stack:
-            top = self.operator_stack.peak()
-            if type(top) == LeftParenOp:
-                self.operator_stack.pop()
-                break
-            self._push_top_operator_to_output_stack()
+        return expr
 
-    def _push_top_operator_to_output_stack(self):
-        top = self.operator_stack.pop()
-        top.push_to_stack(self.output_stack)
+    def _exponentiation(self):
+        expr = self._primary()
 
-    def _push_all_operators_to_output_stack(self):
-        while self.operator_stack:
-            self._push_top_operator_to_output_stack()
+        while self._match(TokenType.EXP):
+            expr = ExpExpr(expr, self._primary())
 
-    def _is_digit(self, c):
-        return c.isdigit()
+        return expr
 
-    def _is_plus(self, c):
-        return c == "+"
+    def _primary(self):
+        if self._match(TokenType.NUMBER):
+            return ConstExpr(value=self._previous().value)
 
-    def _is_subtract(self, c):
-        return c == "-"
+        elif self._match(TokenType.LEFT_PAREN):
+            expr = self._expression()
+            self._consume(TokenType.RIGHT_PAREN)
+            return expr
 
-    def _is_times(self, c):
-        return c == "*"
+    def _match(self, *token_types):
+        for token_type in token_types:
+            if self._check(token_type):
+                self._advance()
+                return True
 
-    def _is_divide(self, c):
-        return c == "/"
+        return False
 
-    def _is_exponentiation(self, c):
-        return c == "^"
+    def _consume(self, token_type):
+        token = self._advance()
+        assert token.type == token_type
 
-    def _is_left_paren(self, c):
-        return c == "("
+    def _check(self, token_type):
+        if self._is_at_end():
+            return False
+        return self._peek().type == token_type
 
-    def _is_right_paren(self, c):
-        return c == ")"
+    def _is_at_end(self):
+        return self.current >= len(self.tokens)
 
+    def _peek(self):
+        return self.tokens[self.current]
 
-class Op:
-    precedence = 0
+    def _previous(self):
+        return self.tokens[self.current - 1]
 
-    def push_to_stack(self, stack):
-        raise NotImplementedError()
-
-
-class BinaryOp(Op):
-    def push_to_stack(self, stack):
-        right = stack.pop()
-        left = stack.pop()
-
-        stack.push(self.expr_cls(left, right))
-
-
-class PlusOp(BinaryOp):
-    precedence = 1
-    expr_cls = PlusExpr
-
-
-class MinusOp(BinaryOp):
-    precedence = 1
-    expr_cls = MinusExpr
-
-
-class TimesOp(BinaryOp):
-    precedence = 2
-    expr_cls = TimesExpr
-
-
-class DivOp(BinaryOp):
-    precedence = 2
-    expr_cls = DivExpr
-
-
-class ExpOp(BinaryOp):
-    precedence = 3
-    expr_cls = ExpExpr
-
-
-class LeftParenOp(Op):
-    pass
+    def _advance(self):
+        self.current += 1
+        return self.tokens[self.current - 1]
