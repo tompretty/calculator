@@ -1,4 +1,12 @@
-from .expression import ConstExpr, DivExpr, ExpExpr, MinusExpr, PlusExpr, TimesExpr, VarExpr
+from .expression import (
+    ConstExpr,
+    DivExpr,
+    ExpExpr,
+    MinusExpr,
+    PlusExpr,
+    TimesExpr,
+    VarExpr,
+)
 from .scanner import TokenType
 from .utils import Stack
 

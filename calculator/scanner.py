@@ -65,13 +65,13 @@ class Scanner:
             while self._peek().isdigit():
                 self._advance()
 
-        self._add_token(TokenType.NUMBER, float(self.source[self.start:self.current]))
+        self._add_token(TokenType.NUMBER, float(self.source[self.start : self.current]))
 
     def _variable(self):
         while self._peek().isalnum() or self._peek() == "_":
             self._advance()
 
-        self._add_token(TokenType.VARIABLE, self.source[self.start:self.current])
+        self._add_token(TokenType.VARIABLE, self.source[self.start : self.current])
 
     def _add_token(self, token_type, value=None):
         self.tokens.append(Token(token_type, value))
