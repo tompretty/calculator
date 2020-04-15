@@ -2,6 +2,6 @@ from calculator import evaluate
 
 
 def test_evaluating_a_constant_expression():
-    expression = "3"
+    source = "3"
 
-    assert evaluate(expression) == 3
+    assert evaluate(source) == 3

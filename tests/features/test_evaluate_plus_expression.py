@@ -2,6 +2,6 @@ from calculator import evaluate
 
 
 def test_evaluating_a_plus_expression():
-    expression = "3+4"
+    source = "3+4"
 
-    assert evaluate(expression) == 7
+    assert evaluate(source) == 7
