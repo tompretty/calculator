@@ -22,7 +22,7 @@ class PlusExpr(BinaryExpr):
         return self.left.evaluate() + self.right.evaluate()
 
 
-class SubExpr(BinaryExpr):
+class MinusExpr(BinaryExpr):
     def evaluate(self):
         return self.left.evaluate() - self.right.evaluate()
 

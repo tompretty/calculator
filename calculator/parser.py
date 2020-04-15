@@ -1,44 +1,39 @@
-from .expression import ConstExpr, DivExpr, ExpExpr, PlusExpr, TimesExpr, SubExpr
+from .expression import ConstExpr, DivExpr, ExpExpr, MinusExpr, PlusExpr, TimesExpr
+from .scanner import TokenType
 from .utils import Stack
 
 
-def parse(string):
-    return Parser(string).parse()
-
-
 class Parser:
-    def __init__(self, string):
-        self.string = string
+    def __init__(self, tokens):
+        self.tokens = tokens
         self.output_stack = Stack()
         self.operator_stack = Stack()
 
     def parse(self):
-        for c in self.string:
-            if self._is_digit(c):
-                self._push_constant_to_output_stack(c)
-            elif self._is_plus(c):
+        for t in self.tokens:
+            if t.type == TokenType.NUMBER:
+                self._push_constant_to_output_stack(t)
+            elif t.type == TokenType.PLUS:
                 self._push_to_operator_stack(PlusOp())
-            elif self._is_subtract(c):
-                self._push_to_operator_stack(SubOp())
-            elif self._is_times(c):
+            elif t.type == TokenType.MINUS:
+                self._push_to_operator_stack(MinusOp())
+            elif t.type == TokenType.TIMES:
                 self._push_to_operator_stack(TimesOp())
-            elif self._is_divide(c):
+            elif t.type == TokenType.DIVIDE:
                 self._push_to_operator_stack(DivOp())
-            elif self._is_exponentiation(c):
+            elif t.type == TokenType.EXP:
                 self._push_to_operator_stack(ExpOp())
-            elif self._is_left_paren(c):
+            elif t.type == TokenType.LEFT_PAREN:
                 self._push_left_paren_to_operator_stack()
-            elif self._is_right_paren(c):
+            elif t.type == TokenType.RIGHT_PAREN:
                 self._push_right_paren_to_operator_stack()
-            else:
-                pass
 
         self._push_all_operators_to_output_stack()
 
         return self.output_stack.pop()
 
-    def _push_constant_to_output_stack(self, c):
-        self.output_stack.push(ConstExpr(value=int(c)))
+    def _push_constant_to_output_stack(self, t):
+        self.output_stack.push(ConstExpr(value=t.value))
 
     def _push_to_operator_stack(self, op):
         while self.operator_stack:
@@ -113,9 +108,9 @@ class PlusOp(BinaryOp):
     expr_cls = PlusExpr
 
 
-class SubOp(BinaryOp):
+class MinusOp(BinaryOp):
     precedence = 1
-    expr_cls = SubExpr
+    expr_cls = MinusExpr
 
 
 class TimesOp(BinaryOp):

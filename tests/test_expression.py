@@ -1,4 +1,11 @@
-from calculator.expression import ConstExpr, PlusExpr, TimesExpr, DivExpr, ExpExpr, SubExpr
+from calculator.expression import (
+    ConstExpr,
+    DivExpr,
+    ExpExpr,
+    MinusExpr,
+    PlusExpr,
+    TimesExpr,
+)
 
 
 def test_constant_expression_evaluates_to_itself():
@@ -13,8 +20,8 @@ def test_plus_expression_evaluates_to_the_sum_of_operands():
     assert expr.evaluate() == 7
 
 
-def test_subtract_expression_evaluates_to_the_difference_of_the_operands():
-    expr = SubExpr(left=ConstExpr(value=3), right=ConstExpr(value=4))
+def test_minus_expression_evaluates_to_the_difference_of_the_operands():
+    expr = MinusExpr(left=ConstExpr(value=3), right=ConstExpr(value=4))
 
     assert expr.evaluate() == -1
 

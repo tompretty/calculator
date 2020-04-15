@@ -33,6 +33,14 @@ def test_scanner_can_tokenize_a_divide():
     assert token.type == TokenType.DIVIDE
 
 
+def test_scanner_can_tokenize_an_exponentiation():
+    source = "^"
+
+    token = Scanner(source).scan_tokens()[0]
+
+    assert token.type == TokenType.EXP
+
+
 def test_scanner_can_tokenize_a_left_paren():
     source = "("
 

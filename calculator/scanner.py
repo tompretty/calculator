@@ -6,13 +6,14 @@ class TokenType(Enum):
     MINUS = 2
     TIMES = 3
     DIVIDE = 4
-    LEFT_PAREN = 5
-    RIGHT_PAREN = 6
-    NUMBER = 7
+    EXP = 5
+    LEFT_PAREN = 6
+    RIGHT_PAREN = 7
+    NUMBER = 8
 
 
 class Token:
-    def __init__(self, type_, value):
+    def __init__(self, type_, value=None):
         self.type = type_
         self.value = value
 
@@ -42,6 +43,8 @@ class Scanner:
             self._add_token(TokenType.TIMES)
         elif c == "/":
             self._add_token(TokenType.DIVIDE)
+        elif c == "^":
+            self._add_token(TokenType.EXP)
         elif c == "(":
             self._add_token(TokenType.LEFT_PAREN)
         elif c == ")":
@@ -59,7 +62,7 @@ class Scanner:
             while self._peek().isdigit():
                 self._advance()
 
-        self._add_token(TokenType.NUMBER, float(self.source[self.start:self.current]))
+        self._add_token(TokenType.NUMBER, float(self.source[self.start : self.current]))
 
     def _add_token(self, token_type, value=None):
         self.tokens.append(Token(token_type, value))
