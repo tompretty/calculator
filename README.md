@@ -2,7 +2,7 @@
 
 A simple python app for evaluating mathematical strings.
 
-Strings are parsed into an expression tree using the [Shunting-yard algorithm](https://en.wikipedia.org/wiki/Shunting-yard_algorithm).
+Strings are parsed into an expression tree using a [recursive descent parser](https://en.wikipedia.org/wiki/Recursive_descent_parser).
 The expression tree is then evaluated recursively to produce the result.
 
 ## Usage
