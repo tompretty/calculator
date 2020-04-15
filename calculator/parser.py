@@ -1,4 +1,4 @@
-from .expression import ConstExpr, DivExpr, ExpExpr, MinusExpr, PlusExpr, TimesExpr
+from .expression import ConstExpr, DivExpr, ExpExpr, MinusExpr, PlusExpr, TimesExpr, VarExpr
 from .scanner import TokenType
 from .utils import Stack
 
@@ -51,7 +51,8 @@ class Parser:
     def _primary(self):
         if self._match(TokenType.NUMBER):
             return ConstExpr(value=self._previous().value)
-
+        elif self._match(TokenType.VARIABLE):
+            return VarExpr(value=self._previous().value)
         elif self._match(TokenType.LEFT_PAREN):
             expr = self._expression()
             self._consume(TokenType.RIGHT_PAREN)

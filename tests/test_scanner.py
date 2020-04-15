@@ -82,3 +82,12 @@ def test_scanner_can_tokenize_numbers_with_fractional_parts():
 
     assert token.type == TokenType.NUMBER
     assert token.value == 123.456
+
+
+def test_scanner_can_tokenize_a_variable():
+    source = "var_1"
+
+    token = Scanner(source).scan_tokens()[0]
+
+    assert token.type == TokenType.VARIABLE
+    assert token.value == "var_1"

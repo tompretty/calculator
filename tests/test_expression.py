@@ -5,6 +5,7 @@ from calculator.expression import (
     MinusExpr,
     PlusExpr,
     TimesExpr,
+    VarExpr,
 )
 
 
@@ -12,6 +13,12 @@ def test_constant_expression_evaluates_to_itself():
     expr = ConstExpr(value=3)
 
     assert expr.evaluate() == 3
+
+
+def test_variable_expression_evaluates_to_the_value_in_the_context():
+    expr = VarExpr(value="x")
+
+    assert expr.evaluate({"x": 3}) == 3
 
 
 def test_plus_expression_evaluates_to_the_sum_of_operands():

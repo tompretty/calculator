@@ -5,6 +5,7 @@ from calculator.expression import (
     MinusExpr,
     PlusExpr,
     TimesExpr,
+    VarExpr,
 )
 from calculator.parser import Parser
 from calculator.scanner import Token, TokenType
@@ -17,6 +18,15 @@ def test_parsing_a_constant_returns_a_constant_expression():
     expr = parser.parse()
 
     assert type(expr) == ConstExpr
+
+
+def test_parsing_a_variable_returns_a_variable_expression():
+    tokens = [Token(TokenType.VARIABLE, "x")]
+
+    parser = Parser(tokens)
+    expr = parser.parse()
+
+    assert type(expr) == VarExpr
 
 
 def test_parsing_a_plus_returns_a_plus_expression():
