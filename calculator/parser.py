@@ -8,14 +8,11 @@ from .expression import (
     VarExpr,
 )
 from .scanner import TokenType
-from .utils import Stack
 
 
 class Parser:
     def __init__(self, tokens):
         self.tokens = tokens
-        self.output_stack = Stack()
-        self.operator_stack = Stack()
         self.current = 0
 
     def parse(self):
