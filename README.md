@@ -15,13 +15,23 @@ from calculator import evaluate
 evaluate("(3 + 4 - 5 * 6) ^ 7")
 ```
 
+Variables can be used too, provided you give them a value through the `context`
+argument
+
+```python
+from calculator import evaluate
+
+evaluate("x + y", context={"x": 3, "y": 4})
+```
+
 The supported operators are
 
-| symbol   | operator        |
-| -------- | --------------- |
-| `4` e.g. | number constant |
-| `+`      | addition        |
-| `-`      | subtraction     |
-| `*`      | multiplication  |
-| `^`      | exponentiation  |
-| `()`     | parenthesis     |
+| symbol        | operator       |
+| ------------- | -------------- |
+| `4` e.g.      | constant       |
+| `my_var` e.g. | variable       |
+| `+`           | addition       |
+| `-`           | subtraction    |
+| `*`           | multiplication |
+| `^`           | exponentiation |
+| `()`          | parenthesis    |
